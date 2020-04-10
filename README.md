@@ -7,6 +7,6 @@
 
 E.g. Endpoint requests:
 
-1. http://localhost:8000/statistics/index?startDate=2020-04-09 10:15&endDate=2020-05-09 10:15
+1. http://localhost:8000/statistics/index?startDate=2020-04-09T10:15&endDate=2020-05-09T10:15
 2. http://localhost:8000/statistics/index?startDate=1586427300&endDate=1589019300
 
