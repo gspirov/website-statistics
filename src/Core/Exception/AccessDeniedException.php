@@ -2,7 +2,9 @@
 
 namespace Core\Exception;
 
-class AccessDeniedException extends BaseException
+use Exception;
+
+class AccessDeniedException extends Exception
 {
     /**
      * @var int $code
@@ -12,5 +14,5 @@ class AccessDeniedException extends BaseException
     /**
      * @var string $message
      */
-    protected $message = 'You are not allowed to perform this action.';
+    protected $message = 'You are not allowed to perform this action via CLI.' . PHP_EOL;
 }

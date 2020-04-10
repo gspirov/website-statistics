@@ -14,6 +14,8 @@
     },
   "require": {
     "ext-json": "*",
-    "ext-apache": "*"
+    "ext-apache": "*",
+    "ext-pdo": "*",
+    "ext-curl": "*"
   }
 }

@@ -4,6 +4,7 @@ namespace Core\Filter;
 
 use Core\Exception\MethodNotAllowedException;
 use Core\Http\Request\Request;
+use Core\Http\Response;
 
 class ActionFilter
 {
@@ -29,7 +30,7 @@ class ActionFilter
     public function satisfiedBy(Request $request): bool
     {
         if (!$this->isMethodAccepted($request)) {
-            throw new MethodNotAllowedException(
+            Response::sendMethodNotAllowed(
                 $this->methods
             );
         }

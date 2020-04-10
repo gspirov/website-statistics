@@ -13,4 +13,12 @@ class BadRequestException extends BaseException
      * @var string $message
      */
     protected $message = 'Missing mandatory URL params from route path.';
+
+    /**
+     * @param string $message
+     */
+    public function setMessage(string $message): void
+    {
+        $this->message = $message;
+    }
 }

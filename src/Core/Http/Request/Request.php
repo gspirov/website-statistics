@@ -2,6 +2,10 @@
 
 namespace Core\Http\Request;
 
+use Core\Exception\BadRequestException;
+use Core\Exception\MethodNotAllowedException;
+use Core\Http\Response;
+
 class Request
 {
     /**
@@ -29,13 +33,15 @@ class Request
 
     /**
      * Request constructor.
+     * @throws BadRequestException
+     * @throws MethodNotAllowedException
+     * @throws \Core\Exception\NotAcceptableException
      */
     public function __construct()
     {
-        $responseExceptions = require_once $_SERVER['DOCUMENT_ROOT'] . '/src/Core/Config/http_response_exceptions.php';
-
+        // prevent all different from `GET` request methods because the user will be only able to fetch data
         if (!$this->isGet()) {
-            $responseExceptions['Access-Control-Allow-Methods']([
+            Response::sendMethodNotAllowed([
                 'GET'
             ]);
         }
@@ -44,17 +50,22 @@ class Request
         $this->_postParams = $_POST;
         $this->_headers = new Headers;
 
+        // throw an exception when there is missing header from http request compared against `_acceptableHeaders` collection
         if ($missingHttpRequestHeaders = array_diff_key($this->_acceptableHeaders, getallheaders())) {
-            $responseExceptions['Missing-Mandatory-HTTP-Request-Headers'](
-                array_keys($missingHttpRequestHeaders)
+            Response::sendMissingMandatoryHttpRequestHeaders(
+                $missingHttpRequestHeaders
             );
         }
 
-        foreach (getallheaders() as $header => $value) {
-            if (!empty($this->_acceptableHeaders[$header]) && strtolower($this->_acceptableHeaders[$header]) !== strtolower($value)) {
-                $responseExceptions[$header]();
-            }
+        // throw an exception where there is invalid http request header value compared against `_acceptableHeaders` collection
+        if (array_udiff($this->_acceptableHeaders, getallheaders(), 'strcasecmp')) {
+            Response::sendNotAcceptedHttpRequestHeaders(
+                $this->_acceptableHeaders
+            );
+        }
 
+        // capture all valid http request headers
+        foreach (getallheaders() as $header => $value) {
             $this->_headers->offsetSet($header, $value);
         }
     }

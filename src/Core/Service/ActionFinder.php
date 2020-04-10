@@ -2,6 +2,7 @@
 
 namespace Core\Service;
 
+use App\Parser\QueryParam\DateTimeParser;
 use Core\Controller\Web\Controller;
 use Core\Exception\BadRequestException;
 use Core\Exception\MethodNotAllowedException;
@@ -9,6 +10,8 @@ use Core\Exception\RouteNotFoundException;
 use Core\Filter\ActionFilter;
 use Core\Http\Request\Action\Action;
 use Core\Http\Request\Request;
+use Core\Http\Response;
+use DateTime;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -46,7 +49,10 @@ class ActionFinder
         $reflectionClass = new ReflectionClass($controller);
 
         if (!$reflectionClass->hasMethod($action)) {
-            throw new RouteNotFoundException;
+            throw new RouteNotFoundException(
+                'Desired action is not implemented yet.',
+                500
+            );
         }
 
         $filter->satisfiedBy($this->request);
@@ -72,7 +78,15 @@ class ActionFinder
             $queryParam = $this->request->getQueryParam($param->getName());
 
             if (empty($queryParam)) {
-                throw new BadRequestException;
+                Response::sendBadRequest();
+            }
+
+            if ($param->getType()->getName() === DateTime::class) {
+                $parser = new DateTimeParser(
+                    $queryParam
+                );
+
+                $queryParam = $parser->parse();
             }
 
             $params[$param->getName()] = $queryParam;

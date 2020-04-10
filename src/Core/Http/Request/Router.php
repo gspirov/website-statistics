@@ -53,7 +53,6 @@ class Router
     /**
      * @param string $route
      * @return Route|null
-     * @throws RouteNotFoundException
      */
     public function getRoute(string $route): ?Route
     {
@@ -61,10 +60,13 @@ class Router
             return $this->_routes[$route];
         }
 
-        throw new RouteNotFoundException;
+        return null;
     }
 
     /**
+     * Store all described accessible routes from `routes.php`.
+     * When storing specific action, the implementation will build and store collection
+     * of `Route` with attached controller and action depends on user request.
      * @throws BadRequestException
      * @throws ControllerNotFoundException
      * @throws MethodNotAllowedException
@@ -73,7 +75,7 @@ class Router
      */
     private function parseRoutes()
     {
-        $routes = require_once $_SERVER['DOCUMENT_ROOT'] . '/src/Core/Config/routes.php';
+        $routes = require_once $_SERVER['DOCUMENT_ROOT'] . '/src/App/Config/routes.php';
 
         foreach ($routes as $route => $options) {
             list($controllerClass, $actionName) = $this->extractRoutePath($route);
