@@ -78,7 +78,9 @@ class ActionFinder
             $queryParam = $this->request->getQueryParam($param->getName());
 
             if (empty($queryParam)) {
-                Response::sendBadRequest();
+                Response::sendBadRequest(
+                    'Missing mandatory URL params from route path: $' . $param->getName()
+                );
             }
 
             if ($param->getType()->getName() === DateTime::class) {
