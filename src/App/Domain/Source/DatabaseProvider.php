@@ -35,6 +35,5 @@ SQL;
                 $source['visits_count']
             );
         }
-
     }
 }

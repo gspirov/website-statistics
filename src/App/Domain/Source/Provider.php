@@ -16,7 +16,7 @@ abstract class Provider
     /**
      * @var Visit[] $data
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * @var Criteria $criteria
