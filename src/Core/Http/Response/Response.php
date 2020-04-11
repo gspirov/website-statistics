@@ -45,7 +45,7 @@ abstract class Response
     public function send()
     {
         foreach ($this->_headers->getAll() as $header => $value) {
-            header('HTTP/1.0 200 OK');
+            header(HTTP_VERSION . ' 200 OK');
             header("{$header}: {$value}");
         }
 
@@ -66,7 +66,7 @@ abstract class Response
     public static function sendNotFound()
     {
         header(
-            'HTTP/1.0 404 Not Found',
+            HTTP_VERSION . ' 404 Not Found',
             true,
             404
         );
@@ -81,7 +81,7 @@ abstract class Response
     public static function sendMethodNotAllowed(array $allowedHttpMethods)
     {
         header(
-            'HTTP/1.0 405 Method Not Allowed',
+            HTTP_VERSION . ' 405 Method Not Allowed',
             true,
             405
         );
@@ -104,7 +104,7 @@ abstract class Response
         }
 
         header(
-            'HTTP/1.0 400 Bad Request',
+            HTTP_VERSION . ' 400 Bad Request',
             true,
             400
         );
@@ -148,7 +148,7 @@ abstract class Response
         );
 
         header(
-            'HTTP/1.0 406 Not Acceptable',
+            HTTP_VERSION . ' 406 Not Acceptable',
             true,
             $exception->getCode()
         );

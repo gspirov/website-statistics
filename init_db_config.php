@@ -22,7 +22,7 @@ $dbHost = trim(fgets(STDIN));
 echo 'Enter db name: ' . PHP_EOL;
 $dbName = trim(fgets(STDIN));
 
-$dbConfig['dsn'] = "pgsql:host={$dbHost};dbname={$dbName};charset=utf-8";
+$dbConfig['dsn'] = "pgsql:host={$dbHost};dbname={$dbName};";
 
 echo 'Enter db username: ' . PHP_EOL;
 $dbConfig['username'] = trim(fgets(STDIN));
